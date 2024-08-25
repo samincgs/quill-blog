@@ -1,11 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 
 app = Flask(__name__)
 
 # dummy data
 posts = [
     {
-        'author': 'John Done',
+        'author': 'John Doe',
         'title': 'Blog Post 1',
         'content': 'First post content',
         'date_posted': 'August 25, 2024',
@@ -22,6 +22,8 @@ posts = [
         'content': 'Third post content',
         'date_posted': 'December 3, 2023',
     },
+    
+    
 ]
 
 @app.route('/')

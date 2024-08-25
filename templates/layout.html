@@ -3,6 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- CSS Link -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{url_for('static', filename='main.css')}}"
+    />
+
     {% if title %}
     <title>Quill Blog - {{title}}</title>
     {% else %}
@@ -10,6 +22,47 @@
     {% endif %}
   </head>
   <body>
-    {% block content %} {% endblock %}
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container">
+        <div class="navbar-container">
+          <div class="navbar-left">
+            <span href="/" class="blog-name">Quill</span>
+            <a href="/" class="nav-link">Home</a>
+            <a href="/" class="nav-link">About</a>
+          </div>
+          <div class="navbar-right">
+            <button type="button" class="btn btn-login">Login</button>
+            <button type="button" class="btn btn-register">Register</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section>
+      <div class="container">
+        <div class="content-grid">
+          <!-- Posts -->
+          <div>{% block content %} {%endblock content %}</div>
+
+          <!-- Sidebar -->
+          <div class="sidebar-card">
+            <h1 class="sidebar-title">Sidebar</h1>
+            <p class="sidebar-info">
+              Welcome to our blog! Here you'll find the latest updates,
+              announcements, and more.
+            </p>
+            <ul class="sidebar-list">
+              <li>Latest Post: 10 Tips for Effective Coding</li>
+              <li>Announcements: New Course Launching Soon!</li>
+              <li>Calendars: Upcoming Events and Deadlines</li>
+              <li>etc</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Scripts -->
   </body>
 </html>

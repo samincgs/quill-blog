@@ -1,5 +1,13 @@
 {% extends "layout.html" %} {% block content %} {% for post in posts %}
-<h1>{{post.title}}</h1>
-<p>By {{post.author}} on {{post.date_posted}}</p>
-<p>{{post.content}}</p>
+<div class="blog-post">
+  <div class="blog-top">
+    <span class="author-name">{{post.author}}</span> |
+    <p class="date-posted">{{post.date_posted}}</p>
+  </div>
+  <div class="line-sep"></div>
+  <div class="blog-content">
+    <h4>{{post.title}}</h4>
+    <p>{{post.content}}</p>
+  </div>
+</div>
 {% endfor %} {% endblock content %}

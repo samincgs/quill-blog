@@ -1,0 +1,161 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8fafc;
+}
+
+.navbar {
+  height: 72px;
+  background-color: #3f414b;
+  min-width: 420px;
+}
+
+.container {
+  max-width: 920px;
+  margin: auto;
+  padding: 20px 10px;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.blog-name {
+  text-decoration: none;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #ccc6c6;
+  padding-left: 20px;
+}
+
+.nav-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.btn {
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  color: black;
+  border: transparent;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  letter-spacing: 1px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s ease-in-out all;
+  text-transform: capitalize;
+}
+
+.btn-login {
+  margin-right: 10px;
+  background-color: #0a82d8;
+  color: white;
+}
+
+.btn-login:hover {
+  background-color: #2b97e4;
+}
+
+.btn-register {
+  background-color: #900ad8;
+  color: white;
+}
+
+.btn-register:hover {
+  background-color: #ad22f8;
+}
+
+.content-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr 300px;
+  margin-top: 2rem;
+}
+
+.sidebar-card {
+  background-color: white;
+  height: 350px;
+  padding: 30px;
+  border-radius: 0.5rem;
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-info {
+  font-size: 0.9rem;
+  max-width: 250px;
+  margin-bottom: 8px;
+}
+
+.sidebar-list {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  padding-left: 5px;
+}
+
+.blog-post {
+  background-color: #fff;
+  padding: 20px 20px;
+  box-shadow: 0px 0px 1px 0px black;
+  margin-bottom: 20px;
+}
+
+.blog-top {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-items: center;
+}
+
+.author-name {
+  color: #0524f2;
+  font-size: 15px;
+}
+
+.line-sep {
+  margin-top: 5px;
+  width: auto;
+  height: 1px;
+  background-color: black;
+}
+
+.date-posted {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.blog-content {
+  margin-top: 6px;
+}
+
+.blog-content h4 {
+  font-size: 1.5rem;
+}
+
+.blog-content p {
+  margin-top: 5px;
+}
