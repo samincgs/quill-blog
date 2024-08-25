@@ -1,9 +1,13 @@
 from flask import Flask, render_template, url_for
 from forms import RegistrationForm, LoginForm
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = '5ac5ac7e6609b42245b3587fafe9b33a'
+app.config['SECRET_KEY'] = getenv('SECRET_KEY')
 
 # dummy data
 posts = [
