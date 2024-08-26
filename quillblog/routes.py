@@ -1,12 +1,7 @@
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
-from dotenv import load_dotenv
-from os import getenv
-
-load_dotenv()
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = getenv('SECRET_KEY')
+from flask import render_template, url_for, redirect, flash
+from quillblog import app
+from quillblog.forms import RegistrationForm, LoginForm
+from quillblog.models import User, Post
 
 # dummy data
 posts = [
@@ -85,6 +80,3 @@ def login():
             
     return render_template('login.html', title='Login', form=form)
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
