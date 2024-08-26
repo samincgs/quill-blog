@@ -1,3 +1,49 @@
 {% extends 'layout.html' %} {% block content%}
-<h1>Login Page</h1>
-{% endblock %}
+<div class="">
+  <form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <!-- Form Title -->
+    <div class="form-group">
+      <h1 class="form-title">Login</h1>
+      <!-- Email Form -->
+      <div class="single-form">
+        {{form.email.label}} {% if form.email.errors %}
+        {{form.email(class='form-input form-error')}}
+        <div class="invalid-feedback">
+          {% for error in form.email.errors %}
+          <span>{{error}}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{form.email(class='form-input')}} {% endif %}
+      </div>
+      <!-- Password Form -->
+      <div class="single-form">
+        {{form.password.label}} {% if form.password.errors %}
+        {{form.password(class='form-input form-error')}}
+        <div class="invalid-feedback">
+          {% for error in form.password.errors %}
+          <span>{{error}}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{form.password(class='form-input')}} {% endif %}
+      </div>
+      <div class="form-checkbox">
+        {{ form.remember() }} {{ form.remember.label() }}
+      </div>
+
+      <!-- Submit Button -->
+      {{form.submit(class='btn btn-signup')}}
+      <!-- Password remember tag -->
+      <a href="#" class="fgt-password">
+        <p>Forgot Password?</p>
+      </a>
+    </div>
+    <div class="submit-area">
+      <p class="alr-btn">
+        Do you need an Account? <a href="{{url_for('register')}}">Sign Up</a>
+      </p>
+    </div>
+  </form>
+</div>
+
+{% endblock content %}

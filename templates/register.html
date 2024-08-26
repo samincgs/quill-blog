@@ -2,19 +2,55 @@
 <div class="">
   <form method="POST" action="">
     {{ form.hidden_tag() }}
-    <fieldset class="">
-      <legend class="">Join Today</legend>
-      <div class="">{{form.username.label}} {{form.username}}</div>
-      <div class="">{{form.email.label}} {{form.email}}</div>
-      <div class="">{{form.password.label}} {{form.password}}</div>
-      <div class="">
-        {{form.confirm_password.label}} {{form.confirm_password}}
+    <!-- Form Title -->
+    <div class="form-group">
+      <h1 class="form-title">Join Today</h1>
+      <!-- Username Form -->
+      <div class="single-form">
+        {{form.username.label}} {{form.username(class='form-input')}}
       </div>
-      <div class="">{{form.submit}}</div>
-    </fieldset>
+      <!-- Email Form -->
+      <div class="single-form">
+        {{form.email.label}} {% if form.email.errors %}
+        {{form.email(class='form-input form-error')}}
+        <div class="invalid-feedback">
+          {% for error in form.email.errors %}
+          <span>{{error}}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{form.email(class='form-input')}} {% endif %}
+      </div>
+      <!-- Password Form -->
+      <div class="single-form">
+        {{form.password.label}} {% if form.password.errors %}
+        {{form.password(class='form-input form-error')}}
+        <div class="invalid-feedback">
+          {% for error in form.password.errors %}
+          <span>{{error}}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{form.password(class='form-input')}} {% endif %}
+      </div>
+      <!-- Confirm Password Form -->
+      <div class="single-form">
+        {{form.confirm_password.label}} {% if form.confirm_password.errors %}
+        {{form.confirm_password(class='form-input form-error')}}
+        <div class="invalid-feedback">
+          {% for error in form.confirm_password.errors %}
+          <span>{{error}}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{form.confirm_password(class='form-input')}} {% endif %}
+      </div>
+      <!-- Form Button -->
+      {{form.submit(class='btn btn-signup')}}
+    </div>
+    <div class="submit-area">
+      <p class="alr-btn">
+        Already Have An Account? <a href="{{url_for('login')}}">Sign In</a>
+      </p>
+    </div>
   </form>
 </div>
-<div class="">
-  <p>Already Have An Account? <a href="{{url_for('login')}}">Sign In</a></p>
-</div>
-{% endblock %}
+
+{% endblock content %}

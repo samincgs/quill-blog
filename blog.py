@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, flash, redirect
 from forms import RegistrationForm, LoginForm
 from dotenv import load_dotenv
 from os import getenv
@@ -6,7 +6,6 @@ from os import getenv
 load_dotenv()
 
 app = Flask(__name__)
-
 app.config['SECRET_KEY'] = getenv('SECRET_KEY')
 
 # dummy data
@@ -29,7 +28,30 @@ posts = [
         'content': 'Third post content',
         'date_posted': 'December 3, 2023',
     },
-    
+    {
+        'author': 'Mary Jones',
+        'title': 'Blog Post 3',
+        'content': 'Third post content',
+        'date_posted': 'December 3, 2023',
+    },
+    {
+        'author': 'Mary Jones',
+        'title': 'Blog Post 3',
+        'content': 'Third post content',
+        'date_posted': 'December 3, 2023',
+    },
+    {
+        'author': 'Mary Jones',
+        'title': 'Blog Post 3',
+        'content': 'Third post content',
+        'date_posted': 'December 3, 2023',
+    },
+    {
+        'author': 'Mary Jones',
+        'title': 'Blog Post 3',
+        'content': 'Third post content',
+        'date_posted': 'December 3, 2023',
+    },
     
 ]
 
@@ -43,14 +65,24 @@ def about():
     return render_template('about.html', title='About')
 
 # forms
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+    if form.validate_on_submit():
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for('home'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+            flash('You have been logged in!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful, Please check username and password', 'danger')
+            
     return render_template('login.html', title='Login', form=form)
 
 

@@ -28,12 +28,16 @@
         <div class="navbar-container">
           <div class="navbar-left">
             <a href='{{url_for("home")}}' class="blog-name">Quill</a>
-            <a href="/" class="nav-link">Home</a>
-            <a href="/" class="nav-link">About</a>
+            <a href="{{url_for('home')}}" class="nav-link">Home</a>
+            <a href="{{url_for('about')}}" class="nav-link">About</a>
           </div>
           <div class="navbar-right">
-            <button type="button" class="btn btn-login">Login</button>
-            <button type="button" class="btn btn-register">Register</button>
+            <a href="{{url_for('login')}}">
+              <button type="button" class="btn btn-login">Login</button>
+            </a>
+            <a href="{{url_for('register')}}">
+              <button type="button" class="btn btn-register">Register</button>
+            </a>
           </div>
         </div>
       </div>
@@ -43,7 +47,13 @@
       <div class="container">
         <div class="content-grid">
           <!-- Posts -->
-          <div>{% block content %} {%endblock content %}</div>
+          <div>
+            {% with messages = get_flashed_messages(with_categories=true) %} {%
+            if messages %} {% for category, message in messages %}
+            <div class="alert-{{category}}">{{message}}</div>
+            {% endfor %} {% endif %} {% endwith %} {% block content %}
+            {%endblock content %}
+          </div>
 
           <!-- Sidebar -->
           <div class="sidebar-card">
