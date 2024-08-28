@@ -9,6 +9,10 @@ body {
   background-color: #f8fafc;
 }
 
+a {
+  text-decoration: none;
+}
+
 .navbar {
   height: 72px;
   background-color: #3f414b;
@@ -69,6 +73,11 @@ body {
 .btn a {
   text-decoration: none;
   color: #fff;
+}
+
+.username {
+  color: #fff;
+  margin-right: 16px;
 }
 
 .btn-login {
@@ -236,7 +245,7 @@ body {
   border-radius: 0.5rem;
   padding: 15px;
   background-color: #5ff2b7;
-  color: rgb(67, 65, 65);
+  color: #262424;
   margin-bottom: 2rem;
   font-weight: 300;
 }
@@ -246,7 +255,17 @@ body {
   border-radius: 0.5rem;
   padding: 15px;
   background-color: #feadad;
-  color: rgb(94, 86, 86);
+  color: #262424;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.alert-retry {
+  font-size: 0.9rem;
+  border-radius: 0.5rem;
+  padding: 15px;
+  background-color: #bfebfe;
+  color: #262424;
   margin-bottom: 2rem;
   font-weight: 300;
 }
@@ -272,4 +291,14 @@ body {
   text-decoration: none;
   font-size: 0.8rem;
   color: #2b97e4;
+}
+
+.account {
+  margin-right: 16px;
+  color: #ffffff;
+}
+
+.account:hover {
+  text-decoration: underline;
+  color: #f8fafc;
 }
