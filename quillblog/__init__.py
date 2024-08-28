@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager
 from dotenv import load_dotenv
 from os import getenv
 
@@ -11,5 +13,9 @@ app.config['SECRET_KEY'] = getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI')
 
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+login_manager = LoginManager(app)
 
 from quillblog import routes
+
+

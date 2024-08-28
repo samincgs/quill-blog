@@ -7,7 +7,14 @@
       <h1 class="form-title">Join Today</h1>
       <!-- Username Form -->
       <div class="single-form">
-        {{form.username.label}} {{form.username(class='form-input')}}
+        {{form.username.label}} {% if form.username.errors %}
+        {{form.username(class='form-input form-error')}}
+        <div class="invalid-feedback">
+          {% for error in form.username.errors %}
+          <span>{{error}}</span>
+          {% endfor %}
+        </div>
+        {% else %} {{form.username(class='form-input')}} {% endif %}
       </div>
       <!-- Email Form -->
       <div class="single-form">
