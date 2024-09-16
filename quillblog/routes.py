@@ -51,8 +51,8 @@ posts = [
     
 ]
 
-@app.route('/')
-@app.route('/home')
+@app.route('/') # can add two routes that lead to the same url
+@app.route('/home') 
 def home():
     return render_template('home.html', posts=posts)
 
@@ -63,7 +63,7 @@ def about():
 # forms
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated:
+    if current_user.is_authenticated: # use flask login to check if the user exists and is authenticated
         return redirect(url_for('home'))
     form = RegistrationForm()
     # if the form submitted by the user is valid
@@ -82,11 +82,11 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+    if current_user.is_authenticated: # use flask login to check if the user is authenticated
+        return redirect(url_for('home')) # if user is authenticated send them to the home page
+    form = LoginForm() # if they are not ask them to login 
+    if form.validate_on_submit(): # if valid form data was submitted
+        user = User.query.filter_by(email=form.email.data).first() # 
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
@@ -95,12 +95,12 @@ def login():
             flash('Login Unsuccessful, Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
-@app.route('/logout')
+@app.route('/logout') 
 def logout():
     logout_user()
     return redirect(url_for('home'))
 
 @app.route('/account')
-@login_required
+@login_required # add a decorator to invoke flask login functionality
 def account():
     return render_template('account.html', title='Account')

@@ -3,8 +3,8 @@ from wtforms import StringField, PasswordField, EmailField, SubmitField, Boolean
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from quillblog.models import User
 
-class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+class RegistrationForm(FlaskForm): # inherits from flaskform
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)]) 
     email = EmailField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
