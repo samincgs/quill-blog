@@ -47,8 +47,7 @@ posts = [
         'title': 'Blog Post 3',
         'content': 'Third post content',
         'date_posted': 'December 3, 2023',
-    },
-    
+    },  
 ]
 
 @app.route('/') # can add two routes that lead to the same url
