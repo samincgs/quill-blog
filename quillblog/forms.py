@@ -10,15 +10,16 @@ class RegistrationForm(FlaskForm): # inherits from flaskform
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
     
-    def validate_username(self, username):
+    # custom validation methods that start with validate_(field)
+    def validate_username(self, username): # checks if a user has already registed with a certain username
         user = User.query.filter_by(username=username.data).first()
         if user:
-            raise ValidationError('Username already exists! Please choose a different one')
+            raise ValidationError('Username already exists! Please choose a different one.')
         
-    def validate_email(self, email):
+    def validate_email(self, email): # checks if a user has already registed with a certain email
         user_email = User.query.filter_by(email=email.data).first()
         if user_email:
-            raise ValidationError('Email already exists! Please choose a different one')
+            raise ValidationError('Email already exists! Please choose a different one.')
     
 class LoginForm(FlaskForm):
     email = EmailField('Email', validators=[DataRequired(), Email()])

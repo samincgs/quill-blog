@@ -2,7 +2,7 @@ from flask import render_template, url_for, redirect, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 from quillblog import app, db, bcrypt
 from quillblog.forms import RegistrationForm, LoginForm
-from quillblog.models import User, Post
+from quillblog.models import User
 
 # dummy data
 posts = [
@@ -87,7 +87,7 @@ def login():
     if form.validate_on_submit(): # if valid form data was submitted
         user = User.query.filter_by(email=form.email.data).first() # 
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
+            login_user(user, remember=form.remember.data) # logs in the user using flask login and start their session, this stores their userid in the session which flask login uses to keep user loggin in accross different requests
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
@@ -96,10 +96,10 @@ def login():
 
 @app.route('/logout') 
 def logout():
-    logout_user()
+    logout_user() # flask login logs out the user by clearing the session data
     return redirect(url_for('home'))
 
 @app.route('/account')
-@login_required # add a decorator to invoke flask login functionality
+@login_required # only lets those who are authenticated to access the account route
 def account():
     return render_template('account.html', title='Account')
