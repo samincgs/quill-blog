@@ -88,7 +88,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first() # 
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data) # logs in the user using flask login and start their session, this stores their userid in the session which flask login uses to keep user loggin in accross different requests
-            next_page = request.args.get('next')
+            next_page = request.args.get('next') # if the query parameter of next exists (requests.args is a dictionary with the queries, so we use .get() to ensure out python program doesnt crash instead it returns a None)
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
             flash('Login Unsuccessful, Please check email and password', 'danger')
@@ -102,4 +102,5 @@ def logout():
 @app.route('/account')
 @login_required # only lets those who are authenticated to access the account route
 def account():
-    return render_template('account.html', title='Account')
+    image_file = url_for('static', filename=f'images/{current_user.image_file}')
+    return render_template('account.html', title='Account', image_file=image_file)

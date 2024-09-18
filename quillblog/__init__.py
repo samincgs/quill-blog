@@ -14,8 +14,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI')
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
-login_manager.login_message_category = 'retry'
+login_manager.login_view = 'login' # set the login route so we can tell flask login where the user needs to login from (function name of the route)
+login_manager.login_message_category = 'retry' # is the css class when the user tries to access a route they are not allowed too
 
 from quillblog import routes
 
