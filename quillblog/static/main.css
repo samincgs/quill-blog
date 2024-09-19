@@ -299,13 +299,15 @@ a {
 }
 
 .account:hover {
-  text-decoration: underline;
   color: #f8fafc;
 }
 
 .profile {
   display: flex;
+  align-items: center;
   gap: 24px;
+  margin-bottom: 16px;
+  padding-top: 12px;
 }
 
 .profile-img {
@@ -318,7 +320,6 @@ a {
 .profile-info {
   display: flex;
   flex-direction: column;
-  gap: 1px;
 }
 .profile-username {
   font-size: 1.7rem;

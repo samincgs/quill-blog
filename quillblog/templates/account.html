@@ -7,6 +7,33 @@
       <p class="profile-email">{{current_user.email}}</p>
     </div>
   </div>
-  <div class="profile-form"></div>
+  <h1 class="form-title">Account Info</h1>
+  <form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <!-- Username Form -->
+    <div class="single-form">
+      {{form.username.label}} {% if form.username.errors %}
+      {{form.username(class='form-input form-error')}}
+      <div class="invalid-feedback">
+        {% for error in form.username.errors %}
+        <span>{{error}}</span>
+        {% endfor %}
+      </div>
+      {% else %} {{form.username(class='form-input')}} {% endif %}
+    </div>
+    <!-- Email Form -->
+    <div class="single-form">
+      {{form.email.label}} {% if form.email.errors %}
+      {{form.email(class='form-input form-error')}}
+      <div class="invalid-feedback">
+        {% for error in form.email.errors %}
+        <span>{{error}}</span>
+        {% endfor %}
+      </div>
+      {% else %} {{form.email(class='form-input')}} {% endif %}
+    </div>
+    <!-- Form Button -->
+    {{form.submit(class='btn btn-signup')}}
+  </form>
 </div>
 {% endblock content %}

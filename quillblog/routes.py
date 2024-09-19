@@ -1,7 +1,7 @@
 from flask import render_template, url_for, redirect, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 from quillblog import app, db, bcrypt
-from quillblog.forms import RegistrationForm, LoginForm
+from quillblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
 from quillblog.models import User
 
 # dummy data
@@ -25,28 +25,28 @@ posts = [
         'date_posted': 'December 3, 2023',
     },
     {
-        'author': 'Mary Jones',
-        'title': 'Blog Post 3',
-        'content': 'Third post content',
-        'date_posted': 'December 3, 2023',
+        'author': 'Alex Finch',
+        'title': 'Blog Post 4',
+        'content': 'Fourth post content',
+        'date_posted': 'June 21, 2023',
     },
     {
-        'author': 'Mary Jones',
-        'title': 'Blog Post 3',
-        'content': 'Third post content',
-        'date_posted': 'December 3, 2023',
+        'author': 'Miles Mendez',
+        'title': 'Blog Post 5',
+        'content': 'Fifth post content',
+        'date_posted': 'January 13, 2023',
     },
     {
-        'author': 'Mary Jones',
-        'title': 'Blog Post 3',
-        'content': 'Third post content',
-        'date_posted': 'December 3, 2023',
+        'author': 'Pooja Kumar',
+        'title': 'Blog Post 6',
+        'content': 'Sixth post content',
+        'date_posted': 'April 12, 2023',
     },
     {
-        'author': 'Mary Jones',
-        'title': 'Blog Post 3',
-        'content': 'Third post content',
-        'date_posted': 'December 3, 2023',
+        'author': 'Sydney Walsh',
+        'title': 'Blog Post 7',
+        'content': 'Seventh post content',
+        'date_posted': 'August 5, 2023',
     },  
 ]
 
@@ -66,7 +66,7 @@ def register():
         return redirect(url_for('home'))
     form = RegistrationForm()
     # if the form submitted by the user is valid
-    if form.validate_on_submit():
+    if form.validate_on_submit(): # checks if request method is POST
         # created a hashed password for security 
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         # create an instance of the User
@@ -99,8 +99,18 @@ def logout():
     logout_user() # flask login logs out the user by clearing the session data
     return redirect(url_for('home'))
 
-@app.route('/account')
+@app.route('/account', methods=['GET', 'POST'])
 @login_required # only lets those who are authenticated to access the account route
 def account():
     image_file = url_for('static', filename=f'images/{current_user.image_file}')
-    return render_template('account.html', title='Account', image_file=image_file)
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data # change the username and email depending on form
+        current_user.email = form.email.data
+        db.session.commit() # add it to sql database
+        flash(f'Your Account has been updated!', 'success')
+        return redirect(url_for('account')) # makes it so we send a get method to retrive the account page, so it blocks the popup that gets sent from forms
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    return render_template('account.html', title='Account', image_file=image_file, form=form)
