@@ -1,0 +1,32 @@
+{% extends "layout.html" %} {% block content %}
+<div class="form-group">
+  <h1 class="form-title">Create Post</h1>
+  <form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <!-- Title Form -->
+    <div class="single-form">
+      {{form.title.label}} {% if form.title.errors %}
+      {{form.title(class='form-input form-error')}}
+      <div class="invalid-feedback">
+        {% for error in form.title.errors %}
+        <span>{{error}}</span>
+        {% endfor %}
+      </div>
+      {% else %} {{form.title(class='form-input')}} {% endif %}
+    </div>
+    <!-- Content Form -->
+    <div class="single-form">
+      {{form.content.label}} {% if form.content.errors %}
+      {{form.content(class='form-input form-error')}}
+      <div class="invalid-feedback">
+        {% for error in form.content.errors %}
+        <span>{{error}}</span>
+        {% endfor %}
+      </div>
+      {% else %} {{form.content(class='form-input')}} {% endif %}
+    </div>
+    <!-- Form Button -->
+    {{form.submit(class='btn btn-signup')}}
+  </form>
+</div>
+{% endblock content %}

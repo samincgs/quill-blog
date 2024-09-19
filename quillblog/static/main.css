@@ -168,11 +168,16 @@ a {
 }
 
 .blog-content h4 {
+  margin-top: 12px;
   font-size: 1.5rem;
+  color: #000000;
 }
 
 .blog-content p {
-  margin-top: 5px;
+  font-size: 0.9rem;
+  line-height: 2rem;
+  color: #2c3e50;
+  padding: 10px 0px;
 }
 
 .form-group {
@@ -347,4 +352,12 @@ a {
 
 .form-img {
   margin-bottom: 0.75rem;
+}
+
+.nav-link-m {
+  margin-right: 1.25rem;
+}
+
+.form-input {
+  font-family: sans-serif;
 }

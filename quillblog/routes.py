@@ -4,59 +4,13 @@ from PIL import Image
 from flask import render_template, url_for, redirect, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 from quillblog import app, db, bcrypt
-from quillblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
-from quillblog.models import User
-
-
-# dummy data
-posts = [
-    {
-        'author': 'John Doe',
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'August 25, 2024',
-    },
-    {
-        'author': 'Jane Smith',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'April 12, 2024',
-    },
-    {
-        'author': 'Mary Jones',
-        'title': 'Blog Post 3',
-        'content': 'Third post content',
-        'date_posted': 'December 3, 2023',
-    },
-    {
-        'author': 'Alex Finch',
-        'title': 'Blog Post 4',
-        'content': 'Fourth post content',
-        'date_posted': 'June 21, 2023',
-    },
-    {
-        'author': 'Miles Mendez',
-        'title': 'Blog Post 5',
-        'content': 'Fifth post content',
-        'date_posted': 'January 13, 2023',
-    },
-    {
-        'author': 'Pooja Kumar',
-        'title': 'Blog Post 6',
-        'content': 'Sixth post content',
-        'date_posted': 'April 12, 2023',
-    },
-    {
-        'author': 'Sydney Walsh',
-        'title': 'Blog Post 7',
-        'content': 'Seventh post content',
-        'date_posted': 'August 5, 2023',
-    },  
-]
+from quillblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
+from quillblog.models import User, Post
 
 @app.route('/') # can add two routes that lead to the same url
 @app.route('/home') 
 def home():
+    posts = Post.query.all()
     return render_template('home.html', posts=posts)
 
 @app.route('/about')
@@ -133,3 +87,16 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     return render_template('account.html', title='Account', image_file=image_file, form=form)
+
+
+@app.route('/post/new', methods=['GET', 'POST'])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post has been created!', 'success')
+        return redirect(url_for('home'))
+    return render_template('create_post.html', title='New Post', form=form)
