@@ -8,7 +8,7 @@
     </div>
   </div>
   <h1 class="form-title">Account Info</h1>
-  <form method="POST" action="">
+  <form method="POST" action="" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <!-- Username Form -->
     <div class="single-form">
@@ -31,6 +31,12 @@
         {% endfor %}
       </div>
       {% else %} {{form.email(class='form-input')}} {% endif %}
+    </div>
+    <div class="img-form">
+      {{form.image.label}} {{form.image(class='form-img')}} {% if
+      form.image.errors %} {% for error in form.image.errors %}
+      <span class="form-img-error">{{error}}</span>
+      {% endfor %} {% endif %}
     </div>
     <!-- Form Button -->
     {{form.submit(class='btn btn-signup')}}
