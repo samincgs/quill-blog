@@ -141,14 +141,14 @@ a {
 
 .blog-top {
   display: flex;
-  gap: 5px;
+  gap: 10px;
   align-items: center;
   justify-items: center;
 }
 
 .author-name {
   color: #0524f2;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .line-sep {
@@ -164,20 +164,23 @@ a {
 }
 
 .blog-content {
-  margin-top: 6px;
+  white-space: pre-line;
+}
+
+.blog-content h4 a {
+  font-size: 1.5rem;
+  color: #0524f2;
 }
 
 .blog-content h4 {
-  margin-top: 12px;
   font-size: 1.5rem;
-  color: #000000;
+  color: #0524f2;
 }
 
 .blog-content p {
   font-size: 0.9rem;
-  line-height: 2rem;
+  line-height: 1.5rem;
   color: #2c3e50;
-  padding: 10px 0px;
 }
 
 .form-group {
@@ -360,4 +363,11 @@ a {
 
 .form-input {
   font-family: sans-serif;
+}
+
+.img-post {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 100%;
 }

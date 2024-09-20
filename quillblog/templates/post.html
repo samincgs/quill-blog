@@ -1,4 +1,4 @@
-{% extends "layout.html" %} {% block content %} {% for post in posts %}
+{% extends "layout.html" %} {% block content %}
 <div class="blog-post">
   <div class="blog-top">
     <img
@@ -10,8 +10,8 @@
   </div>
   <div class="line-sep"></div>
   <div class="blog-content">
-    <h4><a href="{{url_for('post', post_id=post.id)}}">{{post.title}}</a></h4>
+    <h4>{{post.title}}</h4>
     <p>{{post.content}}</p>
   </div>
 </div>
-{% endfor %} {% endblock content %}
+{% endblock content %}

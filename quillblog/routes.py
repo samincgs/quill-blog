@@ -1,7 +1,7 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, redirect, flash, request
+from flask import render_template, url_for, redirect, flash, request, abort
 from flask_login import login_user, logout_user, current_user, login_required
 from quillblog import app, db, bcrypt
 from quillblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
@@ -88,7 +88,7 @@ def account():
         form.email.data = current_user.email
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
-
+# new post route
 @app.route('/post/new', methods=['GET', 'POST'])
 @login_required
 def new_post():
@@ -99,4 +99,32 @@ def new_post():
         db.session.commit()
         flash('Your post has been created!', 'success')
         return redirect(url_for('home'))
-    return render_template('create_post.html', title='New Post', form=form)
+    return render_template('create_post.html', title='New Post', form=form, form_title='Create Post')
+
+@app.route('/post/<int:post_id>') # get an integer number from the query
+def post(post_id):
+    # post = Post.query.get(post_id) # use get to get something by the id
+    post = Post.query.get_or_404(post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
+    
+    return render_template('post.html', title=post.title, post=post)
+
+
+@app.route('/post/<int:post_id>/update', methods=['GET', 'POST']) # get an integer number from the query
+@login_required
+def update_post(post_id):
+    post = Post.query.get_or_404(post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
+    if post.author != current_user:
+        abort(403) # 403 is the http response for a forbidden route/unauthorized
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        db.session.commit()
+        flash('Your Post has been updated!', 'success')
+        return redirect(url_for('post', post_id=post.id))
+    elif request.method == 'GET':
+        form.submit.label.text = 'Update'
+        form.title.data = post.title
+        form.content.data = post.content
+    
+    return render_template('create_post.html', title='Update Post', form=form, form_title='Update Post')

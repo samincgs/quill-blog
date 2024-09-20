@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <div class="form-group">
-  <h1 class="form-title">Create Post</h1>
+  <h1 class="form-title">{{form_title}}</h1>
   <form method="POST" action="">
     {{ form.hidden_tag() }}
     <!-- Title Form -->
