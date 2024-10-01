@@ -3,6 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, redirect, flash, request, abort
 from flask_login import login_user, logout_user, current_user, login_required
+
 from quillblog import app, db, bcrypt
 from quillblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from quillblog.models import User, Post

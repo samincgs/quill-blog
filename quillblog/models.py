@@ -1,7 +1,7 @@
-from quillblog import db, login_manager
-from flask_login import UserMixin
 from datetime import datetime
+from flask_login import UserMixin
 
+from quillblog import db, login_manager
 
 @login_manager.user_loader # reloading the user using the userId from the session (needed for flask login to function and authenticate the user)
 def load_user(user_id): # we return the user based on the id
