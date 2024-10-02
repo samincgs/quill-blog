@@ -7,6 +7,14 @@
     />
     <span class="author-name">{{post.author.username.title()}}</span> |
     <p class="date-posted">{{post.date_posted.strftime("%Y-%m-%d")}}</p>
+    {% if post.author == current_user %}
+    <div class="user-options">
+      <a href="{{url_for('update_post', post_id=post.id)}}" class="update-icon"
+        ><i class="fa-solid fa-pen"></i
+      ></a>
+      <a href="" class="delete-icon"><i class="fa-solid fa-trash"></i></a>
+    </div>
+    {% endif %}
   </div>
   <div class="line-sep"></div>
   <div class="blog-content">

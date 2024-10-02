@@ -29,7 +29,11 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
     
-    
+class PostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    content = TextAreaField('Post Content', validators=[DataRequired()], render_kw={'rows': 7, 'cols': 4})
+    submit = SubmitField('Post')
+           
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = EmailField('Email', validators=[DataRequired(), Email()])
@@ -49,7 +53,3 @@ class UpdateAccountForm(FlaskForm):
                 raise ValidationError('Email already exists! Please choose a different one.')
             
             
-class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    content = TextAreaField('Post Content', validators=[DataRequired()], render_kw={'rows': 7, 'cols': 4})
-    submit = SubmitField('Post')

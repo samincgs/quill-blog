@@ -8,6 +8,8 @@ from quillblog import app, db, bcrypt
 from quillblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from quillblog.models import User, Post
 
+# cant have same function name from multiple posts
+
 @app.route('/') # can add two routes that lead to the same url
 @app.route('/home') 
 def home():
@@ -108,7 +110,6 @@ def post(post_id):
     post = Post.query.get_or_404(post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
     
     return render_template('post.html', title=post.title, post=post)
-
 
 @app.route('/post/<int:post_id>/update', methods=['GET', 'POST']) # get an integer number from the query
 @login_required

@@ -372,3 +372,27 @@ a {
   object-fit: cover;
   border-radius: 100%;
 }
+
+.user-options {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 15px;
+  margin-right: 25px;
+}
+
+.update-icon {
+  color: #3b3141;
+}
+
+.update-icon :hover {
+  color: rgb(101, 69, 119);
+}
+
+.delete-icon {
+  color: red;
+}
+
+.delete-icon :hover {
+  color: rgb(219, 92, 92);
+}

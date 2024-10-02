@@ -14,7 +14,7 @@ class User(db.Model, UserMixin): # UserMixin is a class inherited from flaskLogi
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post',  backref='author', lazy=True) # one user can have multiple posts and backref means that the post model can access the user by using post.author
-    
+     
     def __repr__(self):
         return f'User("{self.username}, {self.email}, {self.image_file}")'
     
@@ -22,8 +22,8 @@ class User(db.Model, UserMixin): # UserMixin is a class inherited from flaskLogi
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     content = db.Column(db.Text, nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     # relationship with User 
     # author = db.Column()
