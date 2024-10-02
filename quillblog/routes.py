@@ -130,3 +130,14 @@ def update_post(post_id):
         form.content.data = post.content
     
     return render_template('create_post.html', title='Update Post', form=form, form_title='Update Post')
+
+@app.route('/post/<int:post_id>/delete', methods=['POST']) # get an integer number from the query
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
+    if post.author != current_user:
+        abort(403) # 403 is the http response for a forbidden route/unauthorized
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your Post has been deleted!', 'success')
+    return redirect(url_for('home'))
