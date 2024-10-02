@@ -1,4 +1,4 @@
-{% extends "layout.html" %} {% block content %} {% for post in posts %}
+{% extends "layout.html" %} {% block content %} {% for post in posts.items %}
 <div class="blog-post">
   <div class="blog-top">
     <img
@@ -14,4 +14,6 @@
     <p>{{post.content}}</p>
   </div>
 </div>
-{% endfor %} {% endblock content %}
+{% endfor %} {% for page_num in posts.iter_pages() %} {% if page_num %}
+<a class="" href="{{url_for('home', page=page_num)}}">{{page_num}}</a>
+{% else %} ... {% endif %} {% endfor %} {% endblock content %}

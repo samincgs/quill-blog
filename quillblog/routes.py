@@ -13,7 +13,9 @@ from quillblog.models import User, Post
 @app.route('/') # can add two routes that lead to the same url
 @app.route('/home') 
 def home():
-    posts = Post.query.all()
+    # posts = Post.query.all()
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.paginate(per_page=3, page=page)
     return render_template('home.html', posts=posts)
 
 @app.route('/about')
