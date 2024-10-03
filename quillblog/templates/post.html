@@ -5,7 +5,8 @@
       src="{{ url_for('static', filename='images/' + post.author.image_file) }}"
       class="img-post"
     />
-    <span class="author-name">{{post.author.username.title()}}</span> |
+    <span class="author-name">{{post.author.username.title()}}</span>
+    |
     <p class="date-posted">{{post.date_posted.strftime("%Y-%m-%d")}}</p>
     {% if post.author == current_user %}
     <div class="user-options">
