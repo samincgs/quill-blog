@@ -457,3 +457,15 @@ a {
 .modal-buttons {
   padding: 20px;
 }
+
+.page-list {
+  border: 1px solid black;
+  padding: 3px 7px;
+}
+
+.current-page {
+  border: 1px solid black;
+  padding: 3px 7px;
+  background-color: #2e48f1d2;
+  color: white;
+}

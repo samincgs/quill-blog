@@ -1,8 +1,8 @@
 // Get the modal, open button, and close button elements
-var modal = document.getElementById('deleteModal')
-var deleteIcon = document.getElementById('delete-icon')
-var closeBtn = document.getElementsByClassName('close')[0]
-var cancelBtn = document.getElementsByClassName('cancel-btn')[0]
+let modal = document.getElementById('deleteModal')
+let deleteIcon = document.getElementById('delete-icon')
+let closeBtn = document.getElementsByClassName('close')[0]
+let cancelBtn = document.getElementsByClassName('cancel-btn')[0]
 
 // When the user clicks the delete icon, open the modal
 deleteIcon.onclick = function (event) {
