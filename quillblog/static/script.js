@@ -1,4 +1,3 @@
-// Get the modal, open button, and close button elements
 let modal = document.getElementById('deleteModal')
 let deleteIcon = document.getElementById('delete-icon')
 let closeBtn = document.getElementsByClassName('close')[0]
