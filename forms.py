@@ -3,7 +3,7 @@ from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from wtforms import StringField, PasswordField, EmailField, SubmitField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from quillblog.models import User
+from models import User
 
 class RegistrationForm(FlaskForm): # inherits from flaskform
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)]) 
