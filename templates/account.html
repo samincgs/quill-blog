@@ -1,4 +1,7 @@
-{% extends "layout.html" %} {% block content%}
+{% from 'macros.html' import form_item_with_errors %}
+{% extends "layout.html" %} 
+
+{% block content%}
 <div class="form-group">
   <div class="profile">
     <img class="profile-img" src="{{image_file}}" />
@@ -10,31 +13,14 @@
   <h1 class="form-title">Account Info</h1>
   <form method="POST" action="" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
-    <!-- Username Form -->
-    <div class="single-form">
-      {{form.username.label}} {% if form.username.errors %}
-      {{form.username(class='form-input form-error')}}
-      <div class="invalid-feedback">
-        {% for error in form.username.errors %}
-        <span>{{error}}</span>
-        {% endfor %}
-      </div>
-      {% else %} {{form.username(class='form-input')}} {% endif %}
-    </div>
-    <!-- Email Form -->
-    <div class="single-form">
-      {{form.email.label}} {% if form.email.errors %}
-      {{form.email(class='form-input form-error')}}
-      <div class="invalid-feedback">
-        {% for error in form.email.errors %}
-        <span>{{error}}</span>
-        {% endfor %}
-      </div>
-      {% else %} {{form.email(class='form-input')}} {% endif %}
-    </div>
+    <!-- Username Field -->
+    {{ form_item_with_errors(form.username) }}
+    <!-- Email Field -->
+    {{ form_item_with_errors(form.email) }}
+    <!-- Image Field -->
     <div class="img-form">
-      {{form.image.label}} {{form.image(class='form-img')}} {% if
-      form.image.errors %} {% for error in form.image.errors %}
+      {{form.image.label}} {{form.image(class='form-img')}} 
+      {% if form.image.errors %} {% for error in form.image.errors %}
       <span class="form-img-error">{{error}}</span>
       {% endfor %} {% endif %}
     </div>

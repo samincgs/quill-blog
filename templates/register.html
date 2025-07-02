@@ -1,3 +1,4 @@
+{% from 'macros.html' import form_item_with_errors %}
 {% extends 'layout.html' %} {% block content%}
 <div>
   <form method="POST" action="">
@@ -6,49 +7,13 @@
     <div class="form-group">
       <h1 class="form-title">Join Today</h1>
       <!-- Username Form -->
-      <div class="single-form">
-        {{form.username.label}} {% if form.username.errors %}
-        {{form.username(class='form-input form-error')}}
-        <div class="invalid-feedback">
-          {% for error in form.username.errors %}
-          <span>{{error}}</span>
-          {% endfor %}
-        </div>
-        {% else %} {{form.username(class='form-input')}} {% endif %}
-      </div>
+      {{ form_item_with_errors(form.username) }}
       <!-- Email Form -->
-      <div class="single-form">
-        {{form.email.label}} {% if form.email.errors %}
-        {{form.email(class='form-input form-error')}}
-        <div class="invalid-feedback">
-          {% for error in form.email.errors %}
-          <span>{{error}}</span>
-          {% endfor %}
-        </div>
-        {% else %} {{form.email(class='form-input')}} {% endif %}
-      </div>
+      {{ form_item_with_errors(form.email) }}
       <!-- Password Form -->
-      <div class="single-form">
-        {{form.password.label}} {% if form.password.errors %}
-        {{form.password(class='form-input form-error')}}
-        <div class="invalid-feedback">
-          {% for error in form.password.errors %}
-          <span>{{error}}</span>
-          {% endfor %}
-        </div>
-        {% else %} {{form.password(class='form-input')}} {% endif %}
-      </div>
+      {{ form_item_with_errors(form.password) }}
       <!-- Confirm Password Form -->
-      <div class="single-form">
-        {{form.confirm_password.label}} {% if form.confirm_password.errors %}
-        {{form.confirm_password(class='form-input form-error')}}
-        <div class="invalid-feedback">
-          {% for error in form.confirm_password.errors %}
-          <span>{{error}}</span>
-          {% endfor %}
-        </div>
-        {% else %} {{form.confirm_password(class='form-input')}} {% endif %}
-      </div>
+      {{ form_item_with_errors(form.confirm) }}
       <!-- Form Button -->
       {{form.submit(class='btn btn-signup')}}
     </div>

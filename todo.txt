@@ -1,0 +1,3 @@
+- add a modal for deletion of post
+- connect to linux server
+- update all sqlalchemy queries to modern api instead of legacy

@@ -17,9 +17,9 @@
         <p>{{post.content}}</p>
     </div>
 </div>
-{% endfor %} Pages: &nbsp;{% for page_num in posts.iter_pages(left_edge=1,
-right_edge=1, left_current=1, right_current=2) %} {% if page_num == posts.page
-%}
+{% endfor %} Pages: &nbsp;
+{% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %} 
+{% if page_num == posts.page %}
 <a class="current-page" href="{{url_for('user_posts', username=user.username, page=page_num)}}">{{page_num}}</a>
 {% elif page_num %}
 <a class="page-list" href="{{url_for('user_posts', username=user.username, page=page_num)}}">{{page_num}}</a>

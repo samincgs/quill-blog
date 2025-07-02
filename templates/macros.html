@@ -1,0 +1,13 @@
+{% macro form_item_with_errors(field) %}
+    <div class="single-form">
+        {{field.label}} 
+        {% if field.errors %}
+        {{field(class='form-input form-error')}}
+        <div class="invalid-feedback">
+            {% for error in field.errors %}
+            <span>{{error}}</span>
+            {% endfor %}
+        </div>
+        {% else %} {{field(class='form-input')}} {% endif %}
+    </div>
+{% endmacro %}
