@@ -1,3 +1,4 @@
 - add a modal for deletion of post
 - connect to linux server
-- update all sqlalchemy queries to modern api instead of legacy
+- update all pagination queries to modern api instead of legacy
+- add a like feature, comments feature, notifications

@@ -13,7 +13,7 @@ from operations import save_picture, clean_img_folder
 def home():
     # posts = Post.query.all()
     page = request.args.get(key='page', default=1, type=int)
-    posts = Post.query.order_by(Post.date_posted.desc()).paginate(per_page=3, page=page) # order by newest
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(per_page=3, page=page) # order by newest TODO
     return render_template('home.html', posts=posts,)
 
 @app.route('/about')
@@ -46,7 +46,8 @@ def login():
         return redirect(url_for('home')) # if user is authenticated send them to the home page
     form = LoginForm() # if they are not ask them to login 
     if form.validate_on_submit(): # if valid form data was submitted
-        user = User.query.filter_by(email=form.email.data).first() # 
+        user = db.session.execute(db.select(User).filter_by(email=form.email.data)).scalar_one()
+        # user = User.query.filter_by(email=form.email.data).first() # 
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data) # logs in the user using flask login and start their session, this stores their userid in the session which flask login uses to keep user loggin in accross different requests
             next_page = request.args.get('next') # if the query parameter of next exists (requests.args is a dictionary with the queries, so we use .get() to ensure out python program doesnt crash instead it returns a None)
@@ -72,8 +73,8 @@ def account():
         current_user.username = form.username.data # change the username and email depending on form
         current_user.email = form.email.data
         db.session.commit() # add it to sql database
-        flash(f'Your Account has been updated!', 'success')
         clean_img_folder()
+        flash(f'Your Account has been updated!', 'success')
         return redirect(url_for('account')) # makes it so we send a get method to retrive the account page, so it blocks the popup that gets sent from forms
     elif request.method == 'GET':
         form.username.data = current_user.username
@@ -96,14 +97,13 @@ def new_post():
 @app.route('/post/<int:post_id>') # get an integer number from the query
 def post(post_id):
     # post = Post.query.get(post_id) # use get to get something by the id
-    post = Post.query.get_or_404(post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
-    
+    post = db.get_or_404(Post, post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
     return render_template('post.html', title=post.title, post=post)
 
 @app.route('/post/<int:post_id>/update', methods=['GET', 'POST']) # get an integer number from the query
 @login_required
 def update_post(post_id):
-    post = Post.query.get_or_404(post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
+    post = db.get_or_404(Post, post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
     if post.author != current_user:
         abort(403) # 403 is the http response for a forbidden route/unauthorized
     form = PostForm()
@@ -123,7 +123,7 @@ def update_post(post_id):
 @app.route('/post/<int:post_id>/delete', methods=['GET', 'POST']) # get an integer number from the query
 @login_required
 def delete_post(post_id):
-    post = Post.query.get_or_404(post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
+    post = post = db.get_or_404(Post, post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
     if post.author != current_user:
         abort(403) # 403 is the http response for a forbidden route/unauthorized
     db.session.delete(post)
@@ -134,6 +134,6 @@ def delete_post(post_id):
 @app.route('/user/<string:username>') 
 def user_posts(username):
     page = request.args.get('page', default=1, type=int)
-    user = User.query.filter_by(username=username).first_or_404() # get the first user with this username and return a 404 Not Found if it doesnt exist
-    posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(per_page=3, page=page)
+    user = db.first_or_404(db.select(User).filter_by(username=username)) # get the first user with this username and return a 404 Not Found if it doesnt exist
+    posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(per_page=3, page=page) # TODO
     return render_template('user_post.html', user=user, posts=posts)
