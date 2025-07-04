@@ -14,16 +14,16 @@ class RegistrationForm(FlaskForm): # inherits from flaskform
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
     
-    # custom validation methods that start with validate_(field)
+    # custom validation methods that start with validate_(field)s
     def validate_username(self, username): # checks if a user has already registed with a certain username
-        user = db.session.execute(db.select(User).filter_by(username=username.data)).scalar_one()
-        # user = User.query.filter_by(username=username.data).first()
+        # user = db.session.execute(db.select(User).filter_by(username=username.data)).scalars().first()
+        user = db.find_user(username=username.data)
         if user:
             raise ValidationError('Username already exists! Please choose a different one.')
         
     def validate_email(self, email): # checks if a user has already registed with a certain email
-        user_email = db.session.execute(db.select(User).filter_by(email=email.data)).scalar_one()
-        # user_email = User.query.filter_by(email=email.data).first()
+        user_email = db.find_user(email=email.data)
+        # user_email = db.session.execute(db.select(User).filter_by(email=email.data)).scalars().first()
         if user_email:
             raise ValidationError('Email already exists! Please choose a different one.')
     
@@ -46,15 +46,15 @@ class UpdateAccountForm(FlaskForm):
     
     def validate_username(self, username): # checks if a user already exists with this username & updates username
         if current_user.username != username.data: # only do if the user is not inputting the same credentials
-            user = db.session.execute(db.select(User).filter_by(username=username.data)).scalar_one()
-            # user = User.query.filter_by(username=username.data).first()
+            user = db.find_user(username=username.data)
+            # user = db.session.execute(db.select(User).filter_by(username=username.data)).scalars().first()
             if user:
                 raise ValidationError('Username already exists! Please choose a different one.')
         
     def validate_email(self, email): # checks if a user already exists with this email
         if current_user.email != email.data: # only do if the user is not inputting the same credentials
-            user_email = db.session.execute(db.select(User).filter_by(email=email.data)).scalar_one()
-            # user = User.query.filter_by(email=email.data).first()
+            user_email = db.find_user(email=email.data)
+            # user_email = db.session.execute(db.select(User).filter_by(email=email.data)).scalars().first()
             if user_email:
                 raise ValidationError('Email already exists! Please choose a different one.')
             

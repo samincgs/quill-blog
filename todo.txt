@@ -1,4 +1,5 @@
 - add a modal for deletion of post
 - connect to linux server
-- update all pagination queries to modern api instead of legacy
+- make mobile responsive
 - add a like feature, comments feature, notifications
+- add a sidebar with filtering properties

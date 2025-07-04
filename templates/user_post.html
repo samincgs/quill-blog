@@ -1,26 +1,28 @@
 {% extends "layout.html" %} {% block content %}
 <h1 class="user-post-heading">
-    Posts by {{ user.username.title() }}
-    <span class="user-post-num">({{posts.total}})</span>
+    Posts by {{ user['username'].title() }}
+    <span class="user-post-num">({{total_posts}})</span>
 </h1>
-{% for post in posts.items %}
+{% for post in posts %}
 <div class="blog-post">
     <div class="blog-top">
-        <img src="{{ url_for('static', filename='images/' + post.author.image_file) }}" class="img-post" />
-        <span class="author-name">{{post.author.username.title()}}</span>
+        <img src="{{ url_for('static', filename='images/' + user['image_file']) }}" class="img-post" />
+        <span class="author-name">{{user['username'].title()}}</span>
         |
-        <p class="date-posted">{{post.date_posted.strftime("%Y-%m-%d")}}</p>
+        <p class="date-posted">{{post['date_posted'].strftime("%Y-%m-%d")}}</p>
     </div>
     <div class="line-sep"></div>
     <div class="blog-content">
-        <h4><a href="{{url_for('post', post_id=post.id)}}">{{post.title}}</a></h4>
-        <p>{{post.content}}</p>
+        <h4><a href="{{url_for('post', post_id=post['id'])}}">{{post['title']}}</a></h4>
+        <p>{{post['content']}}</p>
     </div>
 </div>
 {% endfor %} Pages: &nbsp;
-{% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %} 
-{% if page_num == posts.page %}
-<a class="current-page" href="{{url_for('user_posts', username=user.username, page=page_num)}}">{{page_num}}</a>
-{% elif page_num %}
-<a class="page-list" href="{{url_for('user_posts', username=user.username, page=page_num)}}">{{page_num}}</a>
-{% else %} ... {% endif %} {% endfor %} {% endblock content %}
+{% for page_num in range(1, total_pages + 1) %} 
+    {% if page_num == page %}
+        <a class="current-page" href="{{url_for('user_posts', username=user['username'], page=page_num)}}">{{page_num}}</a>
+    {% elif page_num %}
+        <a class="page-list" href="{{url_for('user_posts', username=user['username'], page=page_num)}}">{{page_num}}</a>
+    {% endif %} 
+{% endfor %} 
+{% endblock content %}

@@ -1,20 +1,37 @@
+import pymongo
+import math
 from flask import render_template, url_for, redirect, flash, request, abort
 from flask_login import login_user, logout_user, current_user, login_required
 
 from init import app, db, bcrypt
 from forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
-from models import User, Post
+from models import User, Post, user_class, post_class
 from operations import save_picture, clean_img_folder
 
-# cant have same function name from multiple posts
+from bson.objectid import ObjectId
 
+PER_PAGE = 3
+
+# cant have same function name from multiple posts
 @app.route('/') # can add two routes that lead to the same url
 @app.route('/home') 
 def home():
-    # posts = Post.query.all()
     page = request.args.get(key='page', default=1, type=int)
-    posts = Post.query.order_by(Post.date_posted.desc()).paginate(per_page=3, page=page) # order by newest TODO
-    return render_template('home.html', posts=posts,)
+    
+    
+    total_posts = db.posts.count_documents({})
+    total_pages = math.ceil(total_posts / PER_PAGE)
+    
+    posts = db.get_posts_per_page(page, per_page=PER_PAGE)
+    
+    for post in posts: # add author id
+        author_id = ObjectId(post['author_id'])
+        post['id'] = str(post['_id'])
+        user = db.users.find_one({'_id': author_id}, {'username': 1, 'image_file': 1})
+        post['author_username'] = user['username']
+        post['author_image_file'] = user['image_file']
+    
+    return render_template('home.html', posts=posts, total_posts=total_posts, total_pages=total_pages, page=page)
 
 @app.route('/about')
 def about():
@@ -23,7 +40,7 @@ def about():
 # forms
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated: # use flask login to check if the user exists and is authenticated
+    if current_user.is_authenticated: # extraa check to make sure a user cannot register again if they are already logged in
         return redirect(url_for('home'))
     form = RegistrationForm()
     # if the form submitted by the user is valid
@@ -33,8 +50,7 @@ def register():
         # create an instance of the User
         user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         # add the user to the db and commit the changes
-        db.session.add(user)
-        db.session.commit()
+        db.add_user(user)
         # create a flash message so that user knows that they have been properly signed in
         flash(f'Account created for {form.username.data}, You are now able to log in!', 'success')
         return redirect(url_for('login'))
@@ -46,7 +62,8 @@ def login():
         return redirect(url_for('home')) # if user is authenticated send them to the home page
     form = LoginForm() # if they are not ask them to login 
     if form.validate_on_submit(): # if valid form data was submitted
-        user = db.session.execute(db.select(User).filter_by(email=form.email.data)).scalar_one()
+        user = db.find_user(email=form.email.data)
+        user = user_class(user) # convert back into class for it to have session properties
         # user = User.query.filter_by(email=form.email.data).first() # 
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data) # logs in the user using flask login and start their session, this stores their userid in the session which flask login uses to keep user loggin in accross different requests
@@ -70,15 +87,15 @@ def account():
         if form.image.data:
             pic_file = save_picture(form.image.data)
             current_user.image_file = pic_file
-        current_user.username = form.username.data # change the username and email depending on form
-        current_user.email = form.email.data
-        db.session.commit() # add it to sql database
+            db.update_user_image(current_user.id, pic_file)
+        db.update_user_info(current_user.id, username=form.username.data, email=form.email.data)
         clean_img_folder()
         flash(f'Your Account has been updated!', 'success')
         return redirect(url_for('account')) # makes it so we send a get method to retrive the account page, so it blocks the popup that gets sent from forms
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+    
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
 # new post route
@@ -87,53 +104,74 @@ def account():
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
-        db.session.add(post)
-        db.session.commit()
+        post = Post(title=form.title.data, content=form.content.data, author_id=current_user.id)
+        db.add_post(post)
+        # db.session.add(post)
+        # db.session.commit()
         flash('Your post has been created!', 'success')
         return redirect(url_for('home'))
     return render_template('create_post.html', title='New Post', form=form, form_title='Create Post')
 
-@app.route('/post/<int:post_id>') # get an integer number from the query
+@app.route('/post/<post_id>') # get an integer number from the query
 def post(post_id):
-    # post = Post.query.get(post_id) # use get to get something by the id
-    post = db.get_or_404(Post, post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
-    return render_template('post.html', title=post.title, post=post)
+    post = db.find_post(post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
+    if not post:
+        abort(404)
+    
+    user = db.find_user(post_author_id=post['author_id'])   
+    post['id'] = str(post['_id']) 
+    
+        
+    return render_template('post.html', title=post['title'], post=post, user=user)
 
-@app.route('/post/<int:post_id>/update', methods=['GET', 'POST']) # get an integer number from the query
+@app.route('/post/<post_id>/update', methods=['GET', 'POST']) # get an integer number from the query
 @login_required
 def update_post(post_id):
-    post = db.get_or_404(Post, post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
-    if post.author != current_user:
+    post = db.find_post(post_id)
+    if not post:
+        abort(404)
+    if post['author_id'] != current_user.id:
         abort(403) # 403 is the http response for a forbidden route/unauthorized
     form = PostForm()
     if form.validate_on_submit():
-        post.title = form.title.data
-        post.content = form.content.data
-        db.session.commit()
+        db.update_post_info(post['_id'], title=form.title.data, content=form.content.data)
+        # db.session.commit()
         flash('Your Post has been updated!', 'success')
-        return redirect(url_for('post', post_id=post.id))
+        return redirect(url_for('post', post_id=str(post['_id'])))
     elif request.method == 'GET':
         form.submit.label.text = 'Update'
-        form.title.data = post.title
-        form.content.data = post.content
+        form.title.data = post['title']
+        form.content.data = post['content']
     
     return render_template('create_post.html', title='Update Post', form=form, form_title='Update Post')
 
-@app.route('/post/<int:post_id>/delete', methods=['GET', 'POST']) # get an integer number from the query
+@app.route('/post/<post_id>/delete', methods=['GET', 'POST']) # get an integer number from the query
 @login_required
 def delete_post(post_id):
-    post = post = db.get_or_404(Post, post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
-    if post.author != current_user:
+    post = post = db.find_post(post_id) # get the post if there is one else throw a 404 error meaning resource could not be found
+    if not post:
+        abort(404)
+    if post['author_id'] != current_user.id:
         abort(403) # 403 is the http response for a forbidden route/unauthorized
-    db.session.delete(post)
-    db.session.commit()
+    db.delete_post(post['_id'])
+    # db.session.delete(post)
+    # db.session.commit()
     flash('Your Post has been deleted!', 'success')
     return redirect(url_for('home'))
 
 @app.route('/user/<string:username>') 
 def user_posts(username):
     page = request.args.get('page', default=1, type=int)
-    user = db.first_or_404(db.select(User).filter_by(username=username)) # get the first user with this username and return a 404 Not Found if it doesnt exist
-    posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(per_page=3, page=page) # TODO
-    return render_template('user_post.html', user=user, posts=posts)
+    
+    user = db.find_user(username=username) # get the first user with this username and return a 404 Not Found if it doesnt exist
+    if not user:
+        abort(404)
+        
+    total_posts = len(list(db.posts.find({'author_id': str(user['_id'])})))
+    total_pages = math.ceil(total_posts / PER_PAGE)
+    
+    posts = db.get_posts_per_page(page, per_page=PER_PAGE, user_id=user['_id'])
+    for post in posts:
+        post['id'] = str(post['_id'])
+    
+    return render_template('user_post.html', user=user, posts=posts, total_posts=total_posts, total_pages=total_pages, page=page)

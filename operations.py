@@ -2,7 +2,6 @@ import secrets
 import os
 from PIL import Image
 from init import app, db
-from models import User
 
 def save_picture(form_image):
     random_hex = secrets.token_hex(8) # 8 bytes (create a random hex to save for the pictures name since there can be pics with duplicate names)
@@ -17,8 +16,9 @@ def save_picture(form_image):
     return new_image_filename
 
 def clean_img_folder():
-    user_imgs = set(db.session.execute(db.select(User.image_file)).scalars().all())
+    user_imgs = set([user['image_file'] for user in db.users.find({})])
     
     for img_name in os.listdir('static/images/'):
         if img_name not in user_imgs:
             os.remove(os.path.join('static', 'images', img_name))
+            
